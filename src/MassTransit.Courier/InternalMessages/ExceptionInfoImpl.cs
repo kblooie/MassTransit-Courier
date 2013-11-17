@@ -14,8 +14,7 @@ namespace MassTransit.Courier.InternalMessages
 {
     using System;
     using Contracts;
-    using Internals.Extensions;
-
+    
 
     class ExceptionInfoImpl :
         ExceptionInfo
@@ -29,7 +28,10 @@ namespace MassTransit.Courier.InternalMessages
 
         public string ExceptionTypeName
         {
-            get { return _exception.GetType().GetTypeName(); }
+            get
+            {
+                return _exception.GetType().FullName;
+            }
         }
 
         public ExceptionInfo InnerException
