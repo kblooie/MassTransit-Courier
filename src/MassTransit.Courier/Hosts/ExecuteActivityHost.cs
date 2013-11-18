@@ -50,7 +50,7 @@ namespace MassTransit.Courier.Hosts
             Execution<TArguments> execution = new HostExecution<TArguments>(context, _compensateAddress);
 
             if (_log.IsDebugEnabled)
-                _log.DebugFormat("Host: {0} Executing: {1}", execution.Bus.Endpoint.Address, execution.TrackingNumber);
+                _log.DebugFormat("Host: {0} Executing: {1}", context.Bus.Endpoint.Address, execution.TrackingNumber);
 
             try
             {

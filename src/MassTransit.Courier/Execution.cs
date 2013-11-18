@@ -32,11 +32,6 @@ namespace MassTransit.Courier
         Guid ActivityTrackingNumber { get; }
 
         /// <summary>
-        /// The service bus instance where the activity is hosted
-        /// </summary>
-        IServiceBus Bus { get; }
-
-        /// <summary>
         /// Completes the execution, without passing a compensating log entry
         /// </summary>
         /// <returns></returns>

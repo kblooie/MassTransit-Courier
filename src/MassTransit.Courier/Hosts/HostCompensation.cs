@@ -53,11 +53,6 @@ namespace MassTransit.Courier.Hosts
             get { return _routingSlip.TrackingNumber; }
         }
 
-        IServiceBus Compensation<TLog>.Bus
-        {
-            get { return _context.Bus; }
-        }
-
         CompensationResult Compensation<TLog>.Compensated()
         {
             var builder = new RoutingSlipBuilder(_routingSlip.TrackingNumber, _routingSlip.Itinerary,

@@ -61,11 +61,6 @@ namespace MassTransit.Courier.Hosts
             get { return _activityTrackingNumber; }
         }
 
-        IServiceBus Execution<TArguments>.Bus
-        {
-            get { return _context.Bus; }
-        }
-
         ExecutionResult Execution<TArguments>.Completed()
         {
             RoutingSlipBuilder builder = CreateRoutingSlipBuilder();

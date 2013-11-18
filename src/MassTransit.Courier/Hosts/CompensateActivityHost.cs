@@ -36,7 +36,7 @@ namespace MassTransit.Courier.Hosts
 
             if (_log.IsDebugEnabled)
             {
-                _log.DebugFormat("Host: {0} Compensating: {1}", compensation.Bus.Endpoint.Address,
+                _log.DebugFormat("Host: {0} Compensating: {1}", context.Bus.Endpoint.Address,
                     compensation.TrackingNumber);
             }
 
