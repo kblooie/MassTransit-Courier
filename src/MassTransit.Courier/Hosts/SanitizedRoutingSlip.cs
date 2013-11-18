@@ -25,8 +25,7 @@ namespace MassTransit.Courier.Hosts
     using Serialization;
 
 
-    public class SanitizedRoutingSlip :
-        RoutingSlip
+    public class SanitizedRoutingSlip : IRoutingSlipContext
     {
         readonly IConsumeContext<RoutingSlip> _jsonContext;
         readonly JToken _messageToken;

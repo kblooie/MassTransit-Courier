@@ -26,10 +26,10 @@ namespace MassTransit.Courier.Hosts
         readonly Guid _activityTrackingNumber;
         readonly TArguments _arguments;
         readonly Uri _compensationAddress;
-        readonly SanitizedRoutingSlip _routingSlip;
+        readonly IRoutingSlipContext _routingSlip;
         readonly IMessagingAdaptor _messagingAdaptor;
 
-        public HostExecution(IMessagingAdaptor messagingAdaptor, SanitizedRoutingSlip routingSlip, Uri compensationAddress)
+        public HostExecution(IMessagingAdaptor messagingAdaptor, IRoutingSlipContext routingSlip, Uri compensationAddress)
         {
             _compensationAddress = compensationAddress;
 

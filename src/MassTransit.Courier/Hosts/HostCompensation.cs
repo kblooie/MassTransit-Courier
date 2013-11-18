@@ -27,9 +27,9 @@ namespace MassTransit.Courier.Hosts
         readonly ActivityLog _activityLog;
         readonly IMessagingAdaptor _messagingAdaptor;
         readonly TLog _log;
-        readonly SanitizedRoutingSlip _routingSlip;
+        readonly IRoutingSlipContext _routingSlip;
 
-        public HostCompensation(IMessagingAdaptor messagingAdaptor, SanitizedRoutingSlip routingSlip)
+        public HostCompensation(IMessagingAdaptor messagingAdaptor, IRoutingSlipContext routingSlip)
         {
             _messagingAdaptor = messagingAdaptor;
 

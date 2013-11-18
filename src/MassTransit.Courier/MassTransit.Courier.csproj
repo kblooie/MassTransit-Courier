@@ -79,6 +79,7 @@
     <Compile Include="InternalMessages\ExceptionInfoImpl.cs" />
     <Compile Include="InternalMessages\RoutingSlipImpl.cs" />
     <Compile Include="Internals\**\*.cs" />
+    <Compile Include="IRoutingSlipContext.cs" />
     <Compile Include="ItineraryBuilder.cs" />
     <Compile Include="MassTransitMessagingAdaptor.cs" />
     <Compile Include="Serialization\JsonExtensions.cs" />
