@@ -1,4 +1,4 @@
-namespace MassTransit.Courier
+namespace MassTransit.Courier.MassTransitIntegration
 {
     using System;
     using Contracts;

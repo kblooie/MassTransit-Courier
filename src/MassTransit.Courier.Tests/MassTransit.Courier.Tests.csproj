@@ -101,6 +101,10 @@
     <Compile Include="TwoActivityEvent_Specs.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MassTransit.Courier.MassTransitIntegration\MassTransit.Courier.MassTransitIntegration.csproj">
+      <Project>{b40eaf5e-7c0c-43a3-995c-dfefa5f18304}</Project>
+      <Name>MassTransit.Courier.MassTransitIntegration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MassTransit.Courier\MassTransit.Courier.csproj">
       <Project>{F949D7CF-A0BD-4915-B170-446D2D07B0F4}</Project>
       <Name>MassTransit.Courier</Name>

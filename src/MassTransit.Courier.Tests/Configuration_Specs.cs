@@ -13,6 +13,7 @@
 namespace MassTransit.Courier.Tests
 {
     using System;
+    using MassTransitIntegration;
     using NUnit.Framework;
     using Testing;
 

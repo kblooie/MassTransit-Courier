@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.Courier", "MassTransit.Courier\MassTransit.Courier.csproj", "{F949D7CF-A0BD-4915-B170-446D2D07B0F4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.Courier.Tests", "MassTransit.Courier.Tests\MassTransit.Courier.Tests.csproj", "{A8251DE0-A8AD-4EB9-A37D-BFD0CFA0A5CF}"
@@ -16,6 +18,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.Courier.MongoDbIntegration", "MassTransit.Courier.MongoDbIntegration\MassTransit.Courier.MongoDbIntegration.csproj", "{E92684F9-6B8A-4A3F-BC5D-85453B37A881}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.Courier.MongoDbIntegration.Tests", "MassTransit.Courier.MongoDbIntegration.Tests\MassTransit.Courier.MongoDbIntegration.Tests.csproj", "{8317BF3D-A4C5-4BC1-8D49-FE93A2D45715}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MassTransit.Courier.MassTransitIntegration", "MassTransit.Courier.MassTransitIntegration\MassTransit.Courier.MassTransitIntegration.csproj", "{B40EAF5E-7C0C-43A3-995C-DFEFA5F18304}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +43,10 @@ Global
 		{8317BF3D-A4C5-4BC1-8D49-FE93A2D45715}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8317BF3D-A4C5-4BC1-8D49-FE93A2D45715}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8317BF3D-A4C5-4BC1-8D49-FE93A2D45715}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B40EAF5E-7C0C-43A3-995C-DFEFA5F18304}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B40EAF5E-7C0C-43A3-995C-DFEFA5F18304}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B40EAF5E-7C0C-43A3-995C-DFEFA5F18304}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B40EAF5E-7C0C-43A3-995C-DFEFA5F18304}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

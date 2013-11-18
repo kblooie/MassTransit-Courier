@@ -15,6 +15,7 @@ namespace MassTransit.Courier.Tests.Testing
     using System;
     using BusConfigurators;
     using Hosts;
+    using MassTransitIntegration;
     using Subscriptions.Coordinator;
 
 
