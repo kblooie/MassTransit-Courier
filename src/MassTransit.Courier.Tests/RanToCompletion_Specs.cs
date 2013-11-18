@@ -36,7 +36,7 @@ namespace MassTransit.Courier.Tests
 
             var builder = new RoutingSlipBuilder(Guid.NewGuid());
 
-            LocalBus.Execute(builder.Build());
+            LocalMessagingAdaptor.Execute(builder.Build());
 
             Assert.IsTrue(handled.WaitOne(Debugger.IsAttached ? 5.Minutes() : 30.Seconds()));
         }
@@ -57,7 +57,7 @@ namespace MassTransit.Courier.Tests
                 {
                     Value = "Hello",
                 });
-            LocalBus.Execute(builder.Build());
+            LocalMessagingAdaptor.Execute(builder.Build());
 
             Assert.IsTrue(handled.WaitOne(Debugger.IsAttached ? 5.Minutes() : 30.Seconds()));
         }

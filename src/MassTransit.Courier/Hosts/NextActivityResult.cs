@@ -23,22 +23,20 @@ namespace MassTransit.Courier.Hosts
     {
         readonly string _activityName;
         readonly Guid _activityTrackingNumber;
-        readonly IServiceBus _bus;
-        readonly IConsumeContext _context;
+        readonly IMessagingAdaptor _messagingAdaptor;
         readonly IDictionary<string, object> _results;
         readonly RoutingSlip _routingSlip;
         readonly DateTime _timestamp;
 
-        public NextActivityResult(IConsumeContext context, RoutingSlip routingSlip, string activityName,
+        public NextActivityResult(IMessagingAdaptor messagingAdaptor, RoutingSlip routingSlip, string activityName,
             Guid activityTrackingNumber, IDictionary<string, object> results)
         {
             _timestamp = DateTime.UtcNow;
-            _context = context;
+            _messagingAdaptor = messagingAdaptor;
             _routingSlip = routingSlip;
             _activityName = activityName;
             _activityTrackingNumber = activityTrackingNumber;
             _results = results;
-            _bus = context.Bus;
         }
 
         public DateTime Timestamp
@@ -48,13 +46,13 @@ namespace MassTransit.Courier.Hosts
 
         public void Evaluate()
         {
-            _bus.Publish<RoutingSlipActivityCompleted>(
+            _messagingAdaptor.Publish<RoutingSlipActivityCompleted>(
                 new RoutingSlipActivityCompletedMessage(_routingSlip.TrackingNumber, _activityName,
                     _activityTrackingNumber, _timestamp, _results, _routingSlip.Variables));
 
-            IEndpoint endpoint = _bus.GetEndpoint(_routingSlip.GetNextExecuteAddress());
-
-            endpoint.Forward(_context, _routingSlip);
+            Uri nextAddress = _routingSlip.GetNextExecuteAddress();
+            
+            _messagingAdaptor.Forward(_routingSlip, nextAddress);
         }
     }
 }

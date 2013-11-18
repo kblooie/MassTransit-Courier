@@ -112,7 +112,7 @@ namespace MassTransit.Courier.Tests
 
             _routingSlip = builder.Build();
 
-            LocalBus.Execute(_routingSlip);
+            LocalMessagingAdaptor.Execute(_routingSlip);
         }
     }
 }

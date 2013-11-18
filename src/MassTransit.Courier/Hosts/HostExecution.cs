@@ -28,6 +28,7 @@ namespace MassTransit.Courier.Hosts
         readonly Uri _compensationAddress;
         readonly IConsumeContext<RoutingSlip> _context;
         readonly SanitizedRoutingSlip _routingSlip;
+        readonly IMessagingAdaptor _messagingAdaptor;
 
         public HostExecution(IConsumeContext<RoutingSlip> context, Uri compensationAddress)
         {
@@ -42,6 +43,7 @@ namespace MassTransit.Courier.Hosts
 
             _activity = _routingSlip.Itinerary[0];
             _arguments = _routingSlip.GetActivityArguments<TArguments>();
+            _messagingAdaptor = new MassTransitMessagingAdaptor(context);
         }
 
         TArguments Execution<TArguments>.Arguments
@@ -183,9 +185,9 @@ namespace MassTransit.Courier.Hosts
         ExecutionResult Faulted(Exception exception)
         {
             if (_routingSlip.IsRunning())
-                return new CompensateResult(_context, _routingSlip, _activity, _activityTrackingNumber, exception);
+                return new CompensateResult(_messagingAdaptor, _routingSlip, _activity, _activityTrackingNumber, exception);
 
-            return new FaultResult(_context.Bus, _routingSlip.TrackingNumber, _activity, _activityTrackingNumber,
+            return new FaultResult(_messagingAdaptor, _routingSlip.TrackingNumber, _activity, _activityTrackingNumber,
                 exception);
         }
 
@@ -211,11 +213,11 @@ namespace MassTransit.Courier.Hosts
         {
             if (routingSlip.RanToCompletion())
             {
-                return new RanToCompletionResult(_context.Bus, routingSlip, _activity.Name, _activityTrackingNumber,
+                return new RanToCompletionResult(_messagingAdaptor, routingSlip, _activity.Name, _activityTrackingNumber,
                     results);
             }
 
-            return new NextActivityResult(_context, routingSlip, _activity.Name, _activityTrackingNumber, results);
+            return new NextActivityResult(_messagingAdaptor, routingSlip, _activity.Name, _activityTrackingNumber, results);
         }
 
         ExecutionResult ReviseItinerary(RoutingSlipBuilder builder, IDictionary<string, object> results,
@@ -229,11 +231,11 @@ namespace MassTransit.Courier.Hosts
 
             if (routingSlip.RanToCompletion())
             {
-                return new RanToCompletionResult(_context.Bus, routingSlip, _activity.Name, _activityTrackingNumber,
+                return new RanToCompletionResult(_messagingAdaptor, routingSlip, _activity.Name, _activityTrackingNumber,
                     results);
             }
 
-            return new NextActivityResult(_context, routingSlip, _activity.Name, _activityTrackingNumber, results);
+            return new NextActivityResult(_messagingAdaptor, routingSlip, _activity.Name, _activityTrackingNumber, results);
         }
     }
 }

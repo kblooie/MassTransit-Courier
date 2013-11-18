@@ -51,7 +51,7 @@ namespace MassTransit.Courier.Tests
                 {
                 });
 
-            LocalBus.Execute(builder.Build());
+            LocalMessagingAdaptor.Execute(builder.Build());
 
             Assert.IsTrue(handled.WaitOne(Debugger.IsAttached ? 5.Minutes() : 30.Seconds()));
         }
@@ -70,7 +70,7 @@ namespace MassTransit.Courier.Tests
             var builder = new RoutingSlipBuilder(Guid.NewGuid());
             builder.AddActivity(faultActivity.Name, faultActivity.ExecuteUri);
 
-            LocalBus.Execute(builder.Build());
+            LocalMessagingAdaptor.Execute(builder.Build());
 
             Assert.IsTrue(handled.WaitOne(Debugger.IsAttached ? 5.Minutes() : 30.Seconds()));
         }
@@ -98,7 +98,7 @@ namespace MassTransit.Courier.Tests
             });
             builder.AddActivity(faultActivity.Name, faultActivity.ExecuteUri);
 
-            LocalBus.Execute(builder.Build());
+            LocalMessagingAdaptor.Execute(builder.Build());
 
             Assert.IsTrue(handled.WaitOne(Debugger.IsAttached ? 5.Minutes() : 30.Seconds()));
         }
@@ -125,7 +125,7 @@ namespace MassTransit.Courier.Tests
             builder.AddActivity(faultyCompensateActivity.Name, faultyCompensateActivity.ExecuteUri);
             builder.AddActivity(faultActivity.Name, faultActivity.ExecuteUri);
 
-            LocalBus.Execute(builder.Build());
+            LocalMessagingAdaptor.Execute(builder.Build());
 
             Assert.IsTrue(handledRoutingSlipFailure.WaitOne(Debugger.IsAttached ? 5.Minutes() : 30.Seconds()));
             Assert.IsTrue(handledCompensationFailure.WaitOne(Debugger.IsAttached ? 5.Minutes() : 30.Seconds()));

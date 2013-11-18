@@ -57,7 +57,7 @@ namespace MassTransit.Courier.Tests
             builder.AddActivity(testActivity.Name, testActivity.ExecuteUri, dictionary);
             builder.AddActivity(testActivity2.Name, testActivity2.ExecuteUri);
 
-            LocalBus.Execute(builder.Build());
+            LocalMessagingAdaptor.Execute(builder.Build());
 
             Assert.AreNotEqual(WaitHandle.WaitTimeout,
                 Task.WaitAny(new Task[] { completed.Task, faulted.Task }, Debugger.IsAttached

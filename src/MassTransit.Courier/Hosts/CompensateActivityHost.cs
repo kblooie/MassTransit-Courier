@@ -32,7 +32,7 @@ namespace MassTransit.Courier.Hosts
 
         void Consumes<IConsumeContext<RoutingSlip>>.All.Consume(IConsumeContext<RoutingSlip> context)
         {
-            Compensation<TLog> compensation = new HostCompensation<TLog>(context);
+            Compensation<TLog> compensation = new HostCompensation<TLog>(context, new MassTransitMessagingAdaptor(context));
 
             if (_log.IsDebugEnabled)
             {

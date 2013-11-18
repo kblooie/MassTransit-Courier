@@ -55,18 +55,19 @@ namespace MassTransit.Courier
             return activity.CompensateAddress;
         }
 
-        public static void Execute(this IServiceBus bus, RoutingSlip routingSlip)
+        public static void Execute(this IMessagingAdaptor messagingAdaptor, RoutingSlip routingSlip)
         {
             if (routingSlip.RanToCompletion())
             {
-                bus.Publish<RoutingSlipCompleted>(new RoutingSlipCompletedMessage(routingSlip.TrackingNumber,
+                messagingAdaptor.Publish<RoutingSlipCompleted>(new RoutingSlipCompletedMessage(routingSlip.TrackingNumber,
                     DateTime.UtcNow, routingSlip.Variables));
             }
             else
             {
-                IEndpoint endpoint = bus.GetEndpoint(routingSlip.GetNextExecuteAddress());
-
-                endpoint.Send(routingSlip, x => x.SetSourceAddress(bus.Endpoint.Address.Uri));
+                Uri hostAddress = messagingAdaptor.GetCurrentHostAddress();
+                Uri nextAddress = routingSlip.GetNextExecuteAddress();
+                
+                messagingAdaptor.Forward(routingSlip, nextAddress, hostAddress);
             }
         }
     }

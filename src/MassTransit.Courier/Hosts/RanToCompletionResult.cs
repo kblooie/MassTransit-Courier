@@ -23,12 +23,12 @@ namespace MassTransit.Courier.Hosts
     {
         readonly string _activityName;
         readonly Guid _activityTrackingNumber;
-        readonly IServiceBus _bus;
+        readonly IMessagingAdaptor _messagingAdaptor;
         readonly IDictionary<string, object> _results;
         readonly RoutingSlip _routingSlip;
         readonly DateTime _timestamp;
 
-        public RanToCompletionResult(IServiceBus bus, RoutingSlip routingSlip, string activityName,
+        public RanToCompletionResult(IMessagingAdaptor messagingAdaptor, RoutingSlip routingSlip, string activityName,
             Guid activityTrackingNumber, IDictionary<string, object> results)
         {
             _timestamp = DateTime.UtcNow;
@@ -36,7 +36,7 @@ namespace MassTransit.Courier.Hosts
             _activityName = activityName;
             _activityTrackingNumber = activityTrackingNumber;
             _results = results;
-            _bus = bus;
+            _messagingAdaptor = messagingAdaptor;
         }
 
         public DateTime Timestamp
@@ -46,11 +46,11 @@ namespace MassTransit.Courier.Hosts
 
         public void Evaluate()
         {
-            _bus.Publish<RoutingSlipActivityCompleted>(
+            _messagingAdaptor.Publish<RoutingSlipActivityCompleted>(
                 new RoutingSlipActivityCompletedMessage(_routingSlip.TrackingNumber, _activityName,
                     _activityTrackingNumber, _timestamp, _results, _routingSlip.Variables));
 
-            _bus.Publish<RoutingSlipCompleted>(new RoutingSlipCompletedMessage(_routingSlip.TrackingNumber, _timestamp,
+            _messagingAdaptor.Publish<RoutingSlipCompleted>(new RoutingSlipCompletedMessage(_routingSlip.TrackingNumber, _timestamp,
                 _routingSlip.Variables));
         }
     }

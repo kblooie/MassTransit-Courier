@@ -97,6 +97,7 @@
     <Compile Include="Testing\ActivityTestContext.cs" />
     <Compile Include="Testing\ActivityTestFixture.cs" />
     <Compile Include="Testing\TestLog.cs" />
+    <Compile Include="Testing\TestMessagingAdaptor.cs" />
     <Compile Include="TwoActivityEvent_Specs.cs" />
   </ItemGroup>
   <ItemGroup>

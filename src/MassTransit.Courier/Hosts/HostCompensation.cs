@@ -26,12 +26,14 @@ namespace MassTransit.Courier.Hosts
     {
         readonly ActivityLog _activityLog;
         readonly IConsumeContext<RoutingSlip> _context;
+        readonly IMessagingAdaptor _messagingAdaptor;
         readonly TLog _log;
         readonly SanitizedRoutingSlip _routingSlip;
 
-        public HostCompensation(IConsumeContext<RoutingSlip> context)
+        public HostCompensation(IConsumeContext<RoutingSlip> context, IMessagingAdaptor messagingAdaptor)
         {
             _context = context;
+            _messagingAdaptor = messagingAdaptor;
 
             _routingSlip = new SanitizedRoutingSlip(context);
             if (_routingSlip.ActivityLogs.Count == 0)
@@ -104,7 +106,7 @@ namespace MassTransit.Courier.Hosts
             var message = new CompensationFailedMessage(_routingSlip.TrackingNumber,
                 _activityLog.Name, _activityLog.ActivityTrackingNumber, timestamp, exception);
 
-            _context.Bus.Publish(message);
+            _messagingAdaptor.Publish(message);
 
             // the exception is thrown so MT will move the routing slip into the error queue
             throw exception;
@@ -114,20 +116,19 @@ namespace MassTransit.Courier.Hosts
         {
             DateTime timestamp = DateTime.UtcNow;
 
-            _context.Bus.Publish<RoutingSlipActivityCompensated>(
+            _messagingAdaptor.Publish<RoutingSlipActivityCompensated>(
                 new RoutingSlipActivityCompensatedMessage(_routingSlip.TrackingNumber,
                     _activityLog.Name, _activityLog.ActivityTrackingNumber, timestamp, _activityLog.Results));
 
             if (routingSlip.IsRunning())
             {
-                IEndpoint endpoint = _context.Bus.GetEndpoint(routingSlip.GetNextCompensateAddress());
-
-                endpoint.Forward(_context, routingSlip);
-
+                Uri nextAddress = routingSlip.GetNextCompensateAddress();
+                _messagingAdaptor.Forward(routingSlip, nextAddress);
+                
                 return new CompensatedResult();
             }
 
-            _context.Bus.Publish<RoutingSlipFaulted>(new RoutingSlipFaultedMessage(routingSlip.TrackingNumber, timestamp,
+            _messagingAdaptor.Publish<RoutingSlipFaulted>(new RoutingSlipFaultedMessage(routingSlip.TrackingNumber, timestamp,
                 routingSlip.ActivityExceptions));
 
             return new FaultedResult();

@@ -22,19 +22,17 @@ namespace MassTransit.Courier.Hosts
     {
         readonly Activity _activity;
         readonly Guid _activityTrackingNumber;
-        readonly IServiceBus _bus;
-        readonly IConsumeContext _context;
+        readonly IMessagingAdaptor _messagingAdaptor;
         readonly Exception _exception;
         readonly RoutingSlip _routingSlip;
         readonly DateTime _timestamp;
 
-        public CompensateResult(IConsumeContext context, RoutingSlip routingSlip, Activity activity,
+        public CompensateResult(IMessagingAdaptor messagingAdaptor, RoutingSlip routingSlip, Activity activity,
             Guid activityTrackingNumber, Exception exception)
         {
             _timestamp = DateTime.UtcNow;
 
-            _context = context;
-            _bus = context.Bus;
+            _messagingAdaptor = messagingAdaptor;
             _routingSlip = routingSlip;
             _activity = activity;
             _exception = exception;
@@ -49,12 +47,14 @@ namespace MassTransit.Courier.Hosts
         public void Evaluate()
         {
             var activityFaultedMessage = new RoutingSlipActivityFaultedMessage(_routingSlip.TrackingNumber, _timestamp, _activity.Name, _activityTrackingNumber, _exception);
-            _bus.Publish<RoutingSlipActivityFaulted>(activityFaultedMessage);
+            _messagingAdaptor.Publish<RoutingSlipActivityFaulted>(activityFaultedMessage);
 
-            IEndpoint endpoint = _bus.GetEndpoint(_routingSlip.GetNextCompensateAddress());
+            Uri hostAdderess = _messagingAdaptor.GetCurrentHostAddress();
+            Uri nextAddress = _routingSlip.GetNextCompensateAddress();
+            
+            RoutingSlip routingSlip = CreateFaultedRoutingSlip(_activity.Name, hostAdderess, _exception);
 
-            RoutingSlip routingSlip = CreateFaultedRoutingSlip(_activity.Name, _bus.Endpoint.Address.Uri, _exception);
-            endpoint.Forward(_context, routingSlip);
+            _messagingAdaptor.Forward(routingSlip, nextAddress);
         }
 
         RoutingSlip CreateFaultedRoutingSlip(string activityName, Uri hostAddress, Exception exception)

@@ -22,16 +22,16 @@ namespace MassTransit.Courier.Hosts
     {
         readonly Activity _activity;
         readonly Guid _activityTrackingNumber;
-        readonly IServiceBus _bus;
+        readonly IMessagingAdaptor _messagingAdaptor;
         readonly Exception _exception;
         readonly DateTime _timestamp;
         readonly Guid _trackingNumber;
 
-        public FaultResult(IServiceBus bus, Guid trackingNumber, Activity activity, Guid activityTrackingNumber,
+        public FaultResult(IMessagingAdaptor messagingAdaptor, Guid trackingNumber, Activity activity, Guid activityTrackingNumber,
             Exception exception)
         {
             _timestamp = DateTime.UtcNow;
-            _bus = bus;
+            _messagingAdaptor = messagingAdaptor;
             _trackingNumber = trackingNumber;
             _activity = activity;
             _activityTrackingNumber = activityTrackingNumber;
@@ -47,13 +47,16 @@ namespace MassTransit.Courier.Hosts
         {
             var activityFaulted = new RoutingSlipActivityFaultedMessage(_trackingNumber, _timestamp, _activity.Name,
                 _activityTrackingNumber, _exception);
-            _bus.Publish<RoutingSlipActivityFaulted>(activityFaulted);
+            
+            _messagingAdaptor.Publish<RoutingSlipActivityFaulted>(activityFaulted);
 
-            var activityExceptionInfo = new ActivityExceptionImpl(_activity.Name, _bus.Endpoint.Address.Uri,
+            Uri hostAddress = _messagingAdaptor.GetCurrentHostAddress();
+
+            var activityExceptionInfo = new ActivityExceptionImpl(_activity.Name, hostAddress,
                 _activityTrackingNumber, _timestamp, _exception);
 
             var routingSlipFaulted = new RoutingSlipFaultedMessage(_trackingNumber, _timestamp, activityExceptionInfo);
-            _bus.Publish<RoutingSlipFaulted>(routingSlipFaulted);
+            _messagingAdaptor.Publish<RoutingSlipFaulted>(routingSlipFaulted);
         }
     }
 }

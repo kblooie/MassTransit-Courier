@@ -57,6 +57,7 @@ namespace MassTransit.Courier.Tests.Testing
 
         protected Uri LocalUri { get; private set; }
         protected IServiceBus LocalBus { get; private set; }
+        protected IMessagingAdaptor LocalMessagingAdaptor { get; private set; }
         protected Uri BaseUri { get; private set; }
         protected IDictionary<Type, ActivityTestContext> ActivityTestContexts { get; private set; }
         protected IEndpointFactory EndpointFactory { get; private set; }
@@ -98,6 +99,7 @@ namespace MassTransit.Courier.Tests.Testing
             SetupActivities();
 
             LocalBus = CreateServiceBus(ConfigureLocalBus);
+            LocalMessagingAdaptor = new TestMessagingAdaptor(LocalBus);
         }
 
         [TestFixtureTearDown]

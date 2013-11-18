@@ -105,7 +105,7 @@
 
             _routingSlip = builder.Build();
 
-            LocalBus.Execute(_routingSlip);
+            LocalMessagingAdaptor.Execute(_routingSlip);
         }
     }
 

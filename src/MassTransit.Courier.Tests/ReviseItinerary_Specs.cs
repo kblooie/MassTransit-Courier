@@ -59,7 +59,7 @@ namespace MassTransit.Courier.Tests
                 {
                     Value = "Time to add a new item!",
                 });
-            LocalBus.Execute(builder.Build());
+            LocalMessagingAdaptor.Execute(builder.Build());
 
             Assert.IsTrue(completed.Task.Wait(TestTimeout), "RoutingSlip did not complete");
             Assert.IsTrue(reviseActivityCompleted.Task.Wait(TestTimeout), "Revise Activity did not complete");
@@ -106,7 +106,7 @@ namespace MassTransit.Courier.Tests
                 {
                     Value = "Hello",
                 });
-            LocalBus.Execute(builder.Build());
+            LocalMessagingAdaptor.Execute(builder.Build());
 
             Assert.IsTrue(completed.Task.Wait(TestTimeout), "RoutingSlip did not complete");
             Assert.IsTrue(reviseActivityCompleted.Task.Wait(TestTimeout), "Revise Activity did not complete");
@@ -153,7 +153,7 @@ namespace MassTransit.Courier.Tests
                 {
                     Value = "Hello",
                 });
-            LocalBus.Execute(builder.Build());
+            LocalMessagingAdaptor.Execute(builder.Build());
 
             Assert.IsTrue(completed.Task.Wait(TestTimeout), "RoutingSlip did not complete");
             Assert.IsTrue(reviseActivityCompleted.Task.Wait(TestTimeout), "Revise Activity did not complete");
