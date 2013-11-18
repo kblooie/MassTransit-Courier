@@ -25,17 +25,15 @@ namespace MassTransit.Courier.Hosts
         where TLog : class
     {
         readonly ActivityLog _activityLog;
-        readonly IConsumeContext<RoutingSlip> _context;
         readonly IMessagingAdaptor _messagingAdaptor;
         readonly TLog _log;
         readonly SanitizedRoutingSlip _routingSlip;
 
-        public HostCompensation(IConsumeContext<RoutingSlip> context, IMessagingAdaptor messagingAdaptor)
+        public HostCompensation(IMessagingAdaptor messagingAdaptor, SanitizedRoutingSlip routingSlip)
         {
-            _context = context;
             _messagingAdaptor = messagingAdaptor;
 
-            _routingSlip = new SanitizedRoutingSlip(context);
+            _routingSlip = routingSlip;
             if (_routingSlip.ActivityLogs.Count == 0)
                 throw new ArgumentException("The routingSlip must contain at least one activity log");
 

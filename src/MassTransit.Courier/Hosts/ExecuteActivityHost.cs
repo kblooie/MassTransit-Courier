@@ -47,7 +47,7 @@ namespace MassTransit.Courier.Hosts
 
         void Consumes<IConsumeContext<RoutingSlip>>.All.Consume(IConsumeContext<RoutingSlip> context)
         {
-            Execution<TArguments> execution = new HostExecution<TArguments>(context, _compensateAddress);
+            Execution<TArguments> execution = new HostExecution<TArguments>(new MassTransitMessagingAdaptor(context), new SanitizedRoutingSlip(context), _compensateAddress);
 
             if (_log.IsDebugEnabled)
                 _log.DebugFormat("Host: {0} Executing: {1}", context.Bus.Endpoint.Address, execution.TrackingNumber);

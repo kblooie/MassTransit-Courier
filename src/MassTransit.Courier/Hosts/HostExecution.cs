@@ -26,16 +26,14 @@ namespace MassTransit.Courier.Hosts
         readonly Guid _activityTrackingNumber;
         readonly TArguments _arguments;
         readonly Uri _compensationAddress;
-        readonly IConsumeContext<RoutingSlip> _context;
         readonly SanitizedRoutingSlip _routingSlip;
         readonly IMessagingAdaptor _messagingAdaptor;
 
-        public HostExecution(IConsumeContext<RoutingSlip> context, Uri compensationAddress)
+        public HostExecution(IMessagingAdaptor messagingAdaptor, SanitizedRoutingSlip routingSlip, Uri compensationAddress)
         {
-            _context = context;
             _compensationAddress = compensationAddress;
 
-            _routingSlip = new SanitizedRoutingSlip(context);
+            _routingSlip = routingSlip;
             if (_routingSlip.Itinerary.Count == 0)
                 throw new ArgumentException("The routingSlip must contain at least one activity");
 
@@ -43,7 +41,7 @@ namespace MassTransit.Courier.Hosts
 
             _activity = _routingSlip.Itinerary[0];
             _arguments = _routingSlip.GetActivityArguments<TArguments>();
-            _messagingAdaptor = new MassTransitMessagingAdaptor(context);
+            _messagingAdaptor = messagingAdaptor;
         }
 
         TArguments Execution<TArguments>.Arguments
